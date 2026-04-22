@@ -8,12 +8,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route('posts.index');
 });
+use App\Http\Controllers\LikeController;
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('posts', PostController::class);
 
+    // commentaires
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // 🔥 likes (AJOUT ICI)
+    Route::post('/posts/{post}/like', [LikeController::class, 'store'])->name('posts.like');
+    Route::delete('/posts/{post}/unlike', [LikeController::class, 'destroy'])->name('posts.unlike');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -114,6 +114,22 @@
                     </svg>
                     <h3 class="mt-4 text-lg font-medium text-gray-900">Aucune publication</h3>
                     <p class="mt-1 text-sm text-gray-500">Le fil d'actualité est vide. Lancez la discussion !</p>
+                    <div class="mt-3 flex items-center gap-3">
+
+    <form action="{{ route('posts.like', $post) }}" method="POST">
+        @csrf
+        <button class="text-blue-600">❤️ Like</button>
+    </form>
+
+    <form action="{{ route('posts.unlike', $post) }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <button class="text-red-600">💔 Unlike</button>
+    </form>
+
+    <span>{{ $post->likes->count() }} likes</span>
+
+</div>
                     <div class="mt-6">
                         <a href="{{ route('posts.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Créer le premier post
