@@ -67,4 +67,25 @@ class User extends Authenticatable
             ->withPivot('role_dans_groupe')
             ->withTimestamps();
     }
+    // utilisateurs que je suis
+public function following()
+{
+    return $this->belongsToMany(
+        User::class,
+        'follows',
+        'follower_id',
+        'following_id'
+    );
+}
+
+// utilisateurs qui me suivent
+public function followers()
+{
+    return $this->belongsToMany(
+        User::class,
+        'follows',
+        'following_id',
+        'follower_id'
+    );
+}
 }

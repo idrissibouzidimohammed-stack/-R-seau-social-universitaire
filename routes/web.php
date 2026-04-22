@@ -4,14 +4,17 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FollowController;
 
 Route::get('/', function () {
     return redirect()->route('posts.index');
 });
 use App\Http\Controllers\LikeController;
 
-Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
     Route::resource('posts', PostController::class);
+    Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow');
+    Route::delete('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
 
     // commentaires
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');

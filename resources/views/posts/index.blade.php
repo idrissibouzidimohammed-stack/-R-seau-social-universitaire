@@ -1,6 +1,7 @@
 <x-app-layout>
     <div class="max-w-4xl mx-auto py-6 px-4">
 
+        {{-- HEADER --}}
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Posts</h1>
             <a href="{{ route('posts.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded">
@@ -8,18 +9,44 @@
             </a>
         </div>
 
+        {{-- POSTS --}}
         @forelse($posts as $post)
             <div class="bg-white shadow rounded p-4 mb-4">
 
-                <h2 class="font-bold text-lg">
+                {{-- USER --}}
+                <div class="font-semibold text-gray-900 text-base">
                     {{ $post->user->name }} {{ $post->user->prenom }}
-                </h2>
+                </div>
 
-                <p class="mt-2 text-gray-700">{{ $post->contenu }}</p>
+                <div class="text-xs text-gray-500 mt-1">
+                    {{ $post->user->followers->count() }} followers
+                </div>
 
-                {{-- ❤️ LIKE --}}
+                {{-- FOLLOW BUTTON --}}
+                @if(auth()->id() !== $post->user_id)
+                    @if(auth()->user()->following->contains($post->user_id))
+                        <form action="{{ route('unfollow', $post->user) }}" method="POST" class="mt-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 text-sm">
+                                Unfollow
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('follow', $post->user) }}" method="POST" class="mt-2">
+                            @csrf
+                            <button type="submit" class="text-blue-600 text-sm">
+                                Follow
+                            </button>
+                        </form>
+                    @endif
+                @endif
+
+                {{-- CONTENT --}}
+                <p class="mt-3 text-gray-700">{{ $post->contenu }}</p>
+
+                {{-- ❤️ LIKES --}}
                 <div class="mt-3 flex items-center gap-3">
-
                     <form action="{{ route('posts.like', $post) }}" method="POST">
                         @csrf
                         <button type="submit" class="text-blue-600">❤️ Like</button>
@@ -34,12 +61,12 @@
                     <span>{{ $post->likes->count() }} likes</span>
                 </div>
 
-                {{-- 📅 DATE --}}
+                {{-- DATE --}}
                 <p class="text-sm text-gray-500 mt-2">
                     {{ $post->created_at->diffForHumans() }}
                 </p>
 
-                {{-- ⚙️ ACTIONS --}}
+                {{-- ACTIONS --}}
                 <div class="mt-4 flex gap-3">
                     <a href="{{ route('posts.show', $post) }}" class="text-green-600">Voir</a>
 
@@ -49,7 +76,7 @@
                         <form action="{{ route('posts.destroy', $post) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="text-red-600">Supprimer</button>
+                            <button type="submit" class="text-red-600">Supprimer</button>
                         </form>
                     @endif
                 </div>
@@ -75,6 +102,7 @@
                         </div>
                     @endforeach
 
+                    {{-- AJOUT COMMENTAIRE --}}
                     <form action="{{ route('comments.store', $post) }}" method="POST" class="mt-3">
                         @csrf
                         <textarea name="contenu" rows="2" class="w-full border rounded p-2" placeholder="Ajouter un commentaire..."></textarea>
@@ -85,6 +113,7 @@
                 </div>
 
             </div>
+
         @empty
             <div class="bg-yellow-100 text-yellow-700 p-4 rounded">
                 Aucun post disponible.
