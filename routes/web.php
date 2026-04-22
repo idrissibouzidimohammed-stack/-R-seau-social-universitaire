@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return redirect()->route('posts.index');
@@ -34,6 +35,10 @@ use App\Http\Controllers\LikeController;
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::get('/messages/create/{user}', [MessageController::class, 'create'])->name('messages.create');
     Route::post('/messages/store/{user}', [MessageController::class, 'store'])->name('messages.store');
+
+    
+    Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
 
 });

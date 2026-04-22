@@ -26,6 +26,20 @@
         Envoyer un message
     </a>
 @endif
+<form action="{{ route('users.search') }}" method="GET" class="mb-6">
+    <div class="flex gap-2">
+        <input 
+            type="text" 
+            name="q" 
+            value="{{ request('q') }}"
+            placeholder="Rechercher un utilisateur..."
+            class="w-full border rounded px-4 py-2"
+        >
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+            Rechercher
+        </button>
+    </div>
+</form>
 
                 {{-- FOLLOW BUTTON --}}
                 @if(auth()->id() !== $post->user_id)
