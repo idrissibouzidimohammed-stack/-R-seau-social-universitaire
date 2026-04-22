@@ -40,3 +40,29 @@
         @endforelse
     </div>
 </x-app-layout>
+<div class="mt-4">
+    <h3 class="font-semibold mb-2">Commentaires</h3>
+
+    @foreach($post->comments as $comment)
+        <div class="border-t pt-2 mt-2 flex justify-between">
+            <div>
+                <strong>{{ $comment->user->name }}</strong> :
+                {{ $comment->contenu }}
+            </div>
+
+            @if(auth()->id() === $comment->user_id)
+                <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button class="text-red-500 text-sm">Supprimer</button>
+                </form>
+            @endif
+        </div>
+    @endforeach
+
+    <form action="{{ route('comments.store', $post) }}" method="POST" class="mt-3">
+        @csrf
+        <textarea name="contenu" rows="2" class="w-full border rounded p-2" placeholder="Ajouter un commentaire..."></textarea>
+        <button class="bg-green-600 text-white px-3 py-1 rounded mt-2">Commenter</button>
+    </form>
+</div>
