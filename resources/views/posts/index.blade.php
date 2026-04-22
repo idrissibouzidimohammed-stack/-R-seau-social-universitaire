@@ -21,6 +21,11 @@
                 <div class="text-xs text-gray-500 mt-1">
                     {{ $post->user->followers->count() }} followers
                 </div>
+                @if(true)
+    <a href="{{ route('messages.create', $post->user) }}" class="text-green-600 text-sm block mt-2">
+        Envoyer un message
+    </a>
+@endif
 
                 {{-- FOLLOW BUTTON --}}
                 @if(auth()->id() !== $post->user_id)

@@ -34,8 +34,6 @@ class User extends Authenticatable
         ];
     }
 
-    // ✅ RELATIONS (ICI à l’intérieur de la classe)
-
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -51,6 +49,33 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+    public function groupes()
+    {
+        return $this->belongsToMany(Groupe::class, 'groupe_user')
+            ->withPivot('role_dans_groupe')
+            ->withTimestamps();
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'follows',
+            'follower_id',
+            'following_id'
+        );
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'follows',
+            'following_id',
+            'follower_id'
+        );
+    }
+
     public function sentMessages()
     {
         return $this->hasMany(Message::class, 'sender_id');
@@ -60,32 +85,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
-
-    public function groupes()
-    {
-        return $this->belongsToMany(Groupe::class, 'groupe_user')
-            ->withPivot('role_dans_groupe')
-            ->withTimestamps();
-    }
-    // utilisateurs que je suis
-public function following()
-{
-    return $this->belongsToMany(
-        User::class,
-        'follows',
-        'follower_id',
-        'following_id'
-    );
-}
-
-// utilisateurs qui me suivent
-public function followers()
-{
-    return $this->belongsToMany(
-        User::class,
-        'follows',
-        'following_id',
-        'follower_id'
-    );
-}
 }
