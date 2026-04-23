@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return redirect()->route('posts.index');
@@ -40,7 +41,8 @@ use App\Http\Controllers\LikeController;
     Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
-
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
 
 require __DIR__.'/auth.php';

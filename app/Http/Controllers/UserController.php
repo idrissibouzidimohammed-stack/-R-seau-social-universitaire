@@ -11,19 +11,20 @@ class UserController extends Controller
     {
         $query = $request->q;
 
-        $users = User::with(['followers'])
-        ->when($query, function ($qBuilder) use ($query) {
-            $qBuilder->where('name', 'like', "%{$query}%")
-             ->orWhere('prenom', 'like', "%{$query}%");
-        })
-        ->get();
+        $users = User::with(['followers', 'posts'])
+            ->when($query, function ($qBuilder) use ($query) {
+                $qBuilder->where('name', 'like', "%{$query}%")
+                    ->orWhere('prenom', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->get();
 
         return view('users.index', compact('users', 'query'));
     }
 
     public function show(User $user)
     {
-        $user->load('posts', 'followers', 'following');
+        $user->load(['posts', 'followers', 'following']);
 
         return view('users.show', compact('user'));
     }

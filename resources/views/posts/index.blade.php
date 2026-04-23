@@ -12,6 +12,30 @@
         {{-- POSTS --}}
         @forelse($posts as $post)
             <div class="bg-white shadow rounded p-4 mb-4">
+                <div class="mb-8">
+    <form action="{{ route('users.search') }}" method="GET">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-3 flex items-center gap-3">
+            <div class="text-gray-400 text-xl px-2">
+                🔍
+            </div>
+
+            <input
+                type="text"
+                name="q"
+                value="{{ request('q') }}"
+                placeholder="Rechercher un étudiant ou enseignant..."
+                class="w-full border-0 focus:ring-0 text-gray-700 placeholder-gray-400"
+            >
+
+            <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-2.5 rounded-xl font-medium"
+            >
+                Rechercher
+            </button>
+        </div>
+    </form>
+</div>
 
                 {{-- USER --}}
                 <div class="font-semibold text-gray-900 text-base">
@@ -21,25 +45,7 @@
                 <div class="text-xs text-gray-500 mt-1">
                     {{ $post->user->followers->count() }} followers
                 </div>
-                @if(true)
-    <a href="{{ route('messages.create', $post->user) }}" class="text-green-600 text-sm block mt-2">
-        Envoyer un message
-    </a>
-@endif
-<form action="{{ route('users.search') }}" method="GET" class="mb-6">
-    <div class="flex gap-2">
-        <input 
-            type="text" 
-            name="q" 
-            value="{{ request('q') }}"
-            placeholder="Rechercher un utilisateur..."
-            class="w-full border rounded px-4 py-2"
-        >
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
-            Rechercher
-        </button>
-    </div>
-</form>
+                
 
                 {{-- FOLLOW BUTTON --}}
                 @if(auth()->id() !== $post->user_id)

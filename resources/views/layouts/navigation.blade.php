@@ -1,4 +1,7 @@
 <nav x-data="{ open: false }" class="bg-black border-b border-green-900/50 shadow-lg shadow-green-900/10">
+    <x-nav-link :href="route('users.search')" :active="request()->routeIs('users.*')">
+    Recherche
+</x-nav-link>
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
