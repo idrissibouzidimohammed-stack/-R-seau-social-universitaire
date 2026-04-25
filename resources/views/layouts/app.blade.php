@@ -9,26 +9,29 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=Outfit:400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            body { font-family: 'Outfit', sans-serif; }
+        </style>
     </head>
-    <body class="font-sans antialiased text-gray-100 bg-black">
-        <div class="min-h-screen bg-black">
+    <body class="antialiased">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-gray-900 border-b border-green-900/30 shadow-lg shadow-green-900/20">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white/50 backdrop-blur-md border-b border-slate-200">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-slate-900 font-bold">
                         {{ $header }}
                     </div>
                 </header>
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="py-8">
                 {{ $slot }}
             </main>
         </div>

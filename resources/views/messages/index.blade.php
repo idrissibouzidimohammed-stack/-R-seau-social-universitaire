@@ -1,47 +1,54 @@
 <x-app-layout>
-    <div class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <div class="mb-10 border-b border-green-900/30 pb-6">
-            <h1 class="text-4xl font-extrabold text-green-500 tracking-tight flex items-center">
-                <span class="mr-4">✉️</span> Messages
-            </h1>
-            <p class="text-gray-500 mt-2">Tes conversations privées avec la communauté.</p>
-        </div>
+    <div class="max-w-[935px] mx-auto py-10 px-4 h-[calc(100vh-120px)]">
+        <div class="card h-full flex overflow-hidden">
+            
+            {{-- Left Side: Contacts List (Simplified) --}}
+            <div class="w-1/3 border-r border-slate-200 flex flex-col">
+                <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+                    <span class="font-bold text-sm tracking-tight mx-auto">{{ auth()->user()->name }}</span>
+                </div>
+                <div class="flex-grow overflow-y-auto">
+                    {{-- Here we would ideally group by conversation, for now just show a cleaner message list --}}
+                    @foreach($messages->unique('sender_id') as $conv)
+                         <div class="flex items-center gap-3 p-4 hover:bg-slate-50 cursor-pointer border-b border-slate-50">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($conv->sender->name) }}&color=000&background=F1F5F9&size=40" class="w-10 h-10 rounded-full border border-slate-100" alt="Avatar">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-bold">{{ $conv->sender->name }}</span>
+                                <span class="text-[10px] text-slate-400">Actif(ve) récemment</span>
+                            </div>
+                         </div>
+                    @endforeach
+                </div>
+            </div>
 
-        <div class="space-y-6">
-            @forelse($messages as $message)
-                @php
-                    $isSent = $message->sender_id === auth()->id();
-                @endphp
-                <div class="flex {{ $isSent ? 'justify-end' : 'justify-start' }}">
-                    <div class="max-w-xl group">
-                        <div class="flex items-center {{ $isSent ? 'justify-end' : 'justify-start' }} mb-2 gap-2">
-                            @if(!$isSent)
-                                <img class="h-6 w-6 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name) }}&color=10B981&background=064E3B&size=24" alt="Avatar">
-                            @endif
-                            <span class="text-[10px] uppercase tracking-widest font-bold {{ $isSent ? 'text-green-800' : 'text-gray-600' }}">
-                                {{ $isSent ? 'Moi' : $message->sender->name }}
-                            </span>
-                            @if($isSent)
-                                <img class="h-6 w-6 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name) }}&color=10B981&background=064E3B&size=24" alt="Avatar">
-                            @endif
+            {{-- Right Side: Chat Window --}}
+            <div class="flex-1 flex flex-col bg-white">
+                <div class="flex-grow p-6 overflow-y-auto space-y-4">
+                    @forelse($messages as $message)
+                        @php $isSent = $message->sender_id === auth()->id(); @endphp
+                        <div class="flex {{ $isSent ? 'justify-end' : 'justify-start' }}">
+                            <div class="max-w-[70%] {{ $isSent ? 'bg-slate-100 text-slate-900 border border-slate-200' : 'bg-white text-slate-900 border border-slate-200' }} px-4 py-3 rounded-[20px] text-xs leading-relaxed font-medium">
+                                {{ $message->contenu }}
+                            </div>
                         </div>
-                        
-                        <div class="relative p-5 rounded-3xl {{ $isSent ? 'bg-green-600 text-black rounded-tr-none shadow-[0_10px_20px_-5px_rgba(22,163,74,0.3)]' : 'bg-gray-900 border border-green-900/20 text-gray-200 rounded-tl-none' }}">
-                            <p class="text-base leading-relaxed break-words">{{ $message->contenu }}</p>
+                    @empty
+                        <div class="h-full flex flex-col items-center justify-center text-center p-10">
+                            <div class="w-24 h-24 rounded-full border-2 border-slate-900 flex items-center justify-center mb-6">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-light">Vos messages</h3>
+                            <p class="text-slate-400 text-xs mt-2">Envoyez des messages privés à un ami ou à un groupe.</p>
                         </div>
-                        
-                        <div class="mt-2 flex {{ $isSent ? 'justify-end' : 'justify-start' }}">
-                            <span class="text-[10px] font-mono text-gray-700 italic">{{ $message->created_at->diffForHumans() }}</span>
-                        </div>
+                    @endforelse
+                </div>
+                
+                {{-- Quick Info --}}
+                @if($messages->count() > 0)
+                    <div class="p-5 text-center bg-slate-50 border-t border-slate-100">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Allez sur le profil de quelqu'un pour lui répondre</p>
                     </div>
-                </div>
-            @empty
-                <div class="text-center py-20 bg-gray-900/30 rounded-[2.5rem] border-2 border-dashed border-green-900/10">
-                    <div class="text-6xl mb-6 opacity-10">💬</div>
-                    <h2 class="text-xl font-bold text-gray-500">Aucune conversation</h2>
-                    <p class="text-gray-600 mt-2">Va sur le profil d'un utilisateur pour lui envoyer un message !</p>
-                </div>
-            @endforelse
+                @endif
+            </div>
         </div>
     </div>
 </x-app-layout>
