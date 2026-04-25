@@ -17,8 +17,8 @@
             body { font-family: 'Outfit', sans-serif; }
         </style>
     </head>
-    <body class="antialiased">
-        <div class="min-h-screen">
+   <body class="font-sans antialiased bg-[#fff8df]">
+        <div class="min-h-screen bg-[#fff8df]">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -37,3 +37,4 @@
         </div>
     </body>
 </html>
+ <bod
