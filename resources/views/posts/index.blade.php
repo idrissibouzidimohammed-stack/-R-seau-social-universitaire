@@ -1,98 +1,142 @@
 <x-app-layout>
-    <div class="min-h-screen bg-[#fffaf0] py-10">
-        <div class="max-w-6xl mx-auto px-6">
+    <div class="min-h-screen bg-[#fff8df] py-10">
+        <div class="max-w-4xl mx-auto px-6">
 
-            <h1 class="text-4xl font-black text-gray-900 mb-8">UseIt</h1>
+            {{-- TITLE --}}
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">UseIt</h1>
 
             {{-- SEARCH --}}
             <form action="{{ route('users.search') }}" method="GET" class="mb-8">
-                <div class="bg-white border border-orange-200 rounded-2xl shadow-sm p-4 flex items-center gap-3">
-                    <span class="bg-yellow-100 text-orange-500 w-10 h-10 rounded-full flex items-center justify-center text-xl">
-                        🔍
-                    </span>
-
-                    <input
-                        type="text"
-                        name="q"
-                        placeholder="Rechercher un utilisateur..."
-                        class="flex-1 border-0 focus:ring-0 text-xl bg-transparent"
-                    >
+                <div class="bg-white border border-orange-200 rounded-xl shadow p-3 flex gap-3">
+                    <input type="text"
+                           name="q"
+                           placeholder="🔍 Rechercher un utilisateur..."
+                           class="flex-1 border-0 focus:ring-0 bg-transparent">
                 </div>
             </form>
 
             {{-- POSTS --}}
             @forelse($posts as $post)
-                <div class="bg-[#fffdf5] border border-orange-100 rounded-3xl shadow-md p-8 mb-8">
+                <div class="bg-white border border-orange-100 rounded-2xl shadow p-6 mb-6 relative">
 
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 rounded-full bg-yellow-100 text-orange-500 flex items-center justify-center text-3xl">
-                                ♙
-                            </div>
-
-                            <div>
-                                <h2 class="text-2xl font-bold text-gray-900">
-                                    {{ $post->user->name }}
-                                </h2>
-                                <p class="text-gray-500">
-                                    {{ $post->created_at->diffForHumans() }}
-                                </p>
-                            </div>
+                    {{-- HEADER --}}
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <h2 class="font-bold text-gray-800">
+                                {{ $post->user->name }}
+                            </h2>
+                            <p class="text-sm text-gray-500">
+                                {{ $post->created_at->diffForHumans() }}
+                            </p>
                         </div>
 
-                        <span class="text-gray-500 text-2xl">•••</span>
+                        {{-- MENU ⋯ --}}
+                        <div class="relative">
+                            <button onclick="toggleMenu(event, {{ $post->id }})"
+                                    style="font-size: 22px; cursor: pointer;">
+                                ⋯
+                            </button>
+
+                            <div id="menu-{{ $post->id }}"
+                                 style="display:none; position:absolute; right:0; top:30px; background:white; border:1px solid #ddd; border-radius:10px; width:150px; box-shadow:0 5px 20px rgba(0,0,0,0.2); z-index:999;">
+
+                                <a href="{{ route('posts.show', $post) }}"
+                                   style="display:block; padding:10px;">
+                                    👁 Voir
+                                </a>
+
+                                @if(auth()->id() === $post->user_id)
+                                    <a href="{{ route('posts.edit', $post) }}"
+                                       style="display:block; padding:10px;">
+                                        ✏ Modifier
+                                    </a>
+
+                                    <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button style="display:block; width:100%; text-align:left; padding:10px; color:red;">
+                                            🗑 Supprimer
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        </div>
                     </div>
 
-                    <p class="text-2xl text-gray-800 leading-relaxed mb-8">
+                    {{-- CONTENT --}}
+                    <p class="text-gray-700 mb-4">
                         {{ $post->contenu }}
                     </p>
 
-                    <div class="flex items-center gap-6 text-2xl mb-6">
+                    {{-- LIKE --}}
+                    <div class="flex items-center gap-4 mb-4">
                         <form action="{{ route('posts.like', $post) }}" method="POST">
                             @csrf
-                            <button class="hover:scale-110">🧡 Like</button>
+                            <button class="text-orange-500">🧡 Like</button>
                         </form>
 
                         <form action="{{ route('posts.unlike', $post) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="hover:scale-110">💔 Unlike</button>
+                            <button class="text-gray-500">💔 Unlike</button>
                         </form>
 
-                        <span class="text-gray-500">
+                        <span class="text-gray-600">
                             {{ $post->likes->count() }} likes
                         </span>
                     </div>
 
-                    <div class="border-t border-orange-100 pt-6">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Commentaires</h3>
+                    {{-- COMMENTS --}}
+                    <div class="border-t pt-4">
+                        <h3 class="font-semibold mb-2">Commentaires</h3>
 
                         @foreach($post->comments as $comment)
-                            <div class="bg-yellow-50 rounded-2xl px-5 py-3 mb-3">
-                                <strong class="text-orange-600">{{ $comment->user->name }}</strong>
-                                <span class="text-gray-700">{{ $comment->contenu }}</span>
-                            </div>
+                            <p class="text-sm mb-1">
+                                <strong>{{ $comment->user->name }}</strong> :
+                                {{ $comment->contenu }}
+                            </p>
                         @endforeach
 
-                        <form action="{{ route('comments.store', $post) }}" method="POST" class="mt-5 flex gap-3">
+                        <form action="{{ route('comments.store', $post) }}" method="POST" class="mt-3 flex gap-2">
                             @csrf
-                            <input
-                                name="contenu"
-                                placeholder="Ajouter un commentaire..."
-                                class="flex-1 rounded-full border-orange-200 focus:ring-orange-300 px-6 py-4 text-lg"
-                            >
-
-                            <button class="bg-orange-400 hover:bg-orange-500 text-white px-6 py-3 rounded-full font-bold">
-                                Publier
+                            <input name="contenu"
+                                   placeholder="Ajouter un commentaire..."
+                                   class="flex-1 rounded-full border-gray-300">
+                            <button class="bg-orange-400 text-white px-4 rounded-full">
+                                OK
                             </button>
                         </form>
                     </div>
+
                 </div>
             @empty
-                <div class="bg-white border border-orange-100 rounded-3xl p-10 text-center shadow">
-                    Aucun post disponible.
+                <div class="text-center text-gray-500 mt-20">
+                    Aucun post 😢
                 </div>
             @endforelse
+
         </div>
     </div>
+
+    {{-- SCRIPT MENU --}}
+    <script>
+        function toggleMenu(event, id) {
+            event.stopPropagation();
+
+            document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+                if (menu.id !== 'menu-' + id) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            const menu = document.getElementById('menu-' + id);
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function () {
+            document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+                menu.style.display = 'none';
+            });
+        });
+    </script>
 </x-app-layout>
