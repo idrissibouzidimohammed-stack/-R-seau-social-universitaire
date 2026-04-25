@@ -22,7 +22,7 @@
                         <div class="flex flex-col">
                             <span class="text-lg font-bold leading-tight">{{ auth()->user()->name }}</span>
                             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
-                                @csrf @method('PUT')
+                                @csrf @method('PATCH')
                                 <input type="file" name="photo" id="photo_input" class="hidden" onchange="this.form.submit()">
                                 <label for="photo_input" class="text-blue-500 text-xs font-bold cursor-pointer hover:text-blue-600 transition-colors">Modifier la photo de profil</label>
                             </form>

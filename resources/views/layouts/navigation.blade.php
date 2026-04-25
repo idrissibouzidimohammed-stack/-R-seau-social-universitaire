@@ -1,14 +1,14 @@
-<nav x-data="{ open: false }" class="bg-white/90 backdrop-blur-md border-b border-white/20 sticky top-0 z-50 shadow-xl shadow-orange-950/10">
+<nav x-data="{ open: false }" class="bg-white/30 backdrop-blur-xl border-b border-white/40 sticky top-0 z-50 shadow-sm">
     <div class="max-w-[975px] mx-auto px-4 lg:px-0">
-        <div class="flex justify-between h-20 items-center">
+        <div class="flex justify-between h-24 items-center">
             
             <!-- Logo -->
             <div class="shrink-0 flex items-center">
-                <a href="{{ route('posts.index') }}" class="transition-transform hover:scale-105 active:scale-95 flex items-center gap-3">
-                    <div class="w-10 h-10 gradient-bg rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/30">
-                        <span class="text-white font-black text-lg">U</span>
+                <a href="{{ route('posts.index') }}" class="transition-transform hover:scale-110 active:scale-95 flex items-center gap-3">
+                    <div class="w-12 h-12 gradient-bg rounded-[1.2rem] flex items-center justify-center shadow-lg shadow-sky-500/10">
+                        <span class="text-white font-black text-xl">C</span>
                     </div>
-                    <span class="text-2xl font-black text-slate-900 tracking-tighter" style="font-family: 'Billabong', cursive, sans-serif;">CampusGram</span>
+                    <span class="text-3xl font-black gradient-text tracking-tighter" style="font-family: 'Billabong', cursive, sans-serif;">CampusGram</span>
                 </a>
             </div>
 
