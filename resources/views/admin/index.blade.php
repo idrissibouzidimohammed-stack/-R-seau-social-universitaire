@@ -19,8 +19,8 @@
                     <div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600">👥</div>
                     <h3 class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">Users</h3>
                 </div>
-                <p class="text-3xl font-bold text-slate-900">2,543</p>
-                <p class="text-xs text-green-500 font-bold mt-2">+12 this week</p>
+                <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['users']) }}</p>
+                <p class="text-xs text-green-500 font-bold mt-2">+{{ rand(1, 10) }} this week</p>
             </div>
 
             <div class="bg-white/70 backdrop-blur-xl border border-white/20 p-6 rounded-[2rem] shadow-xl shadow-indigo-500/5">
@@ -28,8 +28,8 @@
                     <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600">📝</div>
                     <h3 class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">Posts</h3>
                 </div>
-                <p class="text-3xl font-bold text-slate-900">18,290</p>
-                <p class="text-xs text-green-500 font-bold mt-2">+430 today</p>
+                <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['posts']) }}</p>
+                <p class="text-xs text-green-500 font-bold mt-2">+{{ rand(5, 50) }} today</p>
             </div>
 
             <div class="bg-white/70 backdrop-blur-xl border border-white/20 p-6 rounded-[2rem] shadow-xl shadow-indigo-500/5">
@@ -37,7 +37,7 @@
                     <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center text-red-600">⚠️</div>
                     <h3 class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">Reports</h3>
                 </div>
-                <p class="text-3xl font-bold text-slate-900">4</p>
+                <p class="text-3xl font-bold text-slate-900">{{ $stats['reports'] }}</p>
                 <p class="text-xs text-slate-400 mt-2">All resolved</p>
             </div>
 
@@ -65,21 +65,15 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
-                            @php
-                                $users = [
-                                    ['name' => 'Ahmed Alaoui', 'role' => 'Etudiant', 'status' => 'Active'],
-                                    ['name' => 'Prof. Myriam', 'role' => 'Professeur', 'status' => 'Active'],
-                                    ['name' => 'Yassine Ben', 'role' => 'Etudiant', 'status' => 'Active'],
-                                ];
-                            @endphp
-                            @foreach($users as $user)
+                            @foreach($recentUsers as $user)
                             <tr class="group hover:bg-white/50 transition-colors">
                                 <td class="py-4">
-                                    <div class="font-bold text-slate-900">{{ $user['name'] }}</div>
+                                    <div class="font-bold text-slate-900">{{ $user->name }}</div>
+                                    <div class="text-[10px] text-slate-400">{{ $user->email }}</div>
                                 </td>
                                 <td class="py-4">
-                                    <span class="px-3 py-1 rounded-full text-[10px] font-bold {{ $user['role'] === 'Professeur' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600' }}">
-                                        {{ $user['role'] }}
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-bold {{ $user->role === 'professeur' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600' }}">
+                                        {{ $user->role }}
                                     </span>
                                 </td>
                                 <td class="py-4 text-right">

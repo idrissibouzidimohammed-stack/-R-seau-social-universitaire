@@ -44,4 +44,31 @@
             </x-primary-button>
         </div>
     </form>
+
+    {{-- QUICK ACCESS FOR DEV --}}
+    <div class="mt-12 pt-8 border-t border-white/20">
+        <h3 class="text-center text-xs font-black uppercase tracking-widest text-slate-400 mb-6">Quick Access (Dev Mode)</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <button onclick="quickLogin('admin@gmail.com')" class="glass-card p-4 hover:bg-indigo-50 transition-all flex flex-col items-center gap-2 group">
+                <span class="text-2xl group-hover:scale-120 transition-transform">⚙️</span>
+                <span class="text-[10px] font-black uppercase text-slate-900">Admin</span>
+            </button>
+            <button onclick="quickLogin('prof@gmail.com')" class="glass-card p-4 hover:bg-sky-50 transition-all flex flex-col items-center gap-2 group">
+                <span class="text-2xl group-hover:scale-120 transition-transform">👨‍🏫</span>
+                <span class="text-[10px] font-black uppercase text-slate-900">Professor</span>
+            </button>
+            <button onclick="quickLogin('student@gmail.com')" class="glass-card p-4 hover:bg-pink-50 transition-all flex flex-col items-center gap-2 group">
+                <span class="text-2xl group-hover:scale-120 transition-transform">🎓</span>
+                <span class="text-[10px] font-black uppercase text-slate-900">Student</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function quickLogin(email) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = 'password';
+            document.querySelector('form').submit();
+        }
+    </script>
 </x-guest-layout>
