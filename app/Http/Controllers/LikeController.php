@@ -29,4 +29,12 @@ class LikeController extends Controller
 
     return redirect()->back();
 }
+    public function destroy(Post $post)
+    {
+        Like::where('post_id', $post->id)
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        return redirect()->back();
+    }
 }

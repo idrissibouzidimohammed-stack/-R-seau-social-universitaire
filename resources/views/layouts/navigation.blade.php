@@ -23,6 +23,15 @@
             {{-- ICONS --}}
             <div class="flex items-center gap-6 text-3xl text-gray-900">
                 <a href="{{ route('posts.index') }}" class="bg-yellow-100 p-3 rounded-2xl hover:bg-yellow-200">⌂</a>
+                
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="hover:text-indigo-600 text-2xl" title="Admin Dashboard">⚙</a>
+                @elseif(auth()->user()->role === 'professeur')
+                    <a href="{{ route('professor.dashboard') }}" class="hover:text-blue-500 text-2xl" title="Professor Dashboard">👨‍🏫</a>
+                @else
+                    <a href="{{ route('student.dashboard') }}" class="hover:text-orange-500 text-2xl" title="Student Dashboard">🎓</a>
+                @endif
+
                 <a href="{{ route('messages.index') }}" class="hover:text-orange-500">☁</a>
                 <a href="{{ route('posts.create') }}" class="hover:text-orange-500">＋</a>
                 <a href="{{ route('notifications.index') }}" class="hover:text-orange-500">♡</a>

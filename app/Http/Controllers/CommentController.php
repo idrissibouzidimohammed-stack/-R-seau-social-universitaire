@@ -33,4 +33,14 @@ public function store(Request $request, Post $post)
 
     return redirect()->back()->with('success', 'Commentaire ajouté');
 }
+    public function destroy(Comment $comment)
+    {
+        if ($comment->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $comment->delete();
+
+        return redirect()->back()->with('success', 'Commentaire supprimé');
+    }
 }
